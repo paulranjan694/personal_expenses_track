@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
-class NewTransaction extends StatelessWidget {
+class NewTransaction extends StatefulWidget {
   final Function addTransaction;
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
 
   NewTransaction(this.addTransaction);
+
+  @override
+  _NewTransactionState createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+  final titleController = TextEditingController();
+
+  final amountController = TextEditingController();
 
   void transactionSubmitHandler() {
     final enteredTitle = titleController.text;
@@ -15,34 +22,43 @@ class NewTransaction extends StatelessWidget {
       return;
     }
 
-    addTransaction(enteredTitle, enteredAmount);
+    //accessing the properties of widget into state
+    widget.addTransaction(
+      enteredTitle,
+      enteredAmount,
+    );
+
+    // to close the modal
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 10,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TextField(
-            decoration: InputDecoration(labelText: 'Title'),
-            // onChanged: (val) => titleInput = val,
-            controller: titleController,
-          ),
-          TextField(
-            decoration: InputDecoration(labelText: 'Amount'),
-            // onChanged: (val) => amountInput = val,
-            controller: amountController,
-            keyboardType: TextInputType.number,
-            onSubmitted: (_) => transactionSubmitHandler(),
-          ),
-          FlatButton(
-            onPressed: transactionSubmitHandler,
-            child: Text('Add Transaction'),
-            textColor: Colors.purple,
-          )
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TextField(
+              decoration: InputDecoration(labelText: 'Title'),
+              // onChanged: (val) => titleInput = val,
+              controller: titleController,
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: 'Amount'),
+              // onChanged: (val) => amountInput = val,
+              controller: amountController,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => transactionSubmitHandler(),
+            ),
+            FlatButton(
+              onPressed: transactionSubmitHandler,
+              child: Text('Add Transaction'),
+              textColor: Colors.purple,
+            )
+          ],
+        ),
       ),
     );
   }
